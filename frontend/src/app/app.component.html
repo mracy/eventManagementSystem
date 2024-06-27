@@ -1,0 +1,165 @@
+<!-- src/app/app.component.html -->
+
+<div class="flex items-center justify-center">
+    <div class="w-full max-w-xl">
+        <h2 class="text-center text-3xl 
+      font-semibold leading-7 text-green-600 mt-2">
+            Event Management Web App
+        </h2>
+        <div class="rounded overflow-hidden shadow-lg mt-5">
+            <form class="px-6 py-4 bg-gray-100">
+                <div class="space-y-12">
+                    <div class="border-b border-gray-900/10 pb-4">
+                        <div class="grid grid-cols-1 gap-x-6
+                       gap-y-4 sm:grid-cols-6">
+                            <div class="sm:col-span-6">
+                                <label for="title" class="block text-sm 
+                                  font-medium leading-6 text-gray-900
+                                   required">Title</label>
+                                <div class="mt-2">
+                                    <input type="text" [(ngModel)]="title" name="title" id="title" autocomplete="title"
+                                        class="block w-full rounded-md border-0
+                                       py-1.5 text-gray-900 shadow-sm ring-1 
+                                       ring-inset ring-gray-300 placeholder:text-gray-400
+                                        focus:ring-2 focus:ring-inset 
+                                        focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Event Title"
+                                        required />
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                <label for="location" class="block text-sm font-medium leading-6
+                                   text-gray-900 required">Location</label>
+                                <div class="mt-2">
+                                    <select [(ngModel)]="location" id="location" name="location" autocomplete="location"
+                                        class="block w-full rounded-md border-0 
+                                      py-1.5 text-gray-900 shadow-sm ring-1
+                                       ring-inset ring-gray-300 focus:ring-2 
+                                       focus:ring-inset focus:ring-indigo-600 
+                                       sm:max-w-xs sm:text-sm sm:leading-6" required>
+                                        <option>Australia</option>
+                                        <option>France</option>
+                                        <option>India</option>
+                                        <option>Japan</option>
+                                        <option>Nepal</option>
+                                        <option>United Kingdom</option>
+                                        <option>United States</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="sm:col-span-3">
+                                <label for="date" class="block text-sm font-medium leading-6
+                                   text-gray-900 required">Date</label>
+                                <div class="mt-2">
+                                    <input [(ngModel)]="date" id="date" name="date" type="date" class="block w-full rounded-md
+                                       border-0 py-1.5 text-gray-900 shadow-sm
+                                        ring-1 ring-inset ring-gray-300 focus:ring-2
+                                         focus:ring-inset focus:ring-indigo-600
+                                          sm:max-w-xs sm:text-sm sm:leading-6" required />
+                                </div>
+                            </div>
+                            <div class="sm:col-span-6">
+                                <div class="relative flex gap-x-3">
+                                    <div class="flex h-6 items-center">
+                                        <input [(ngModel)]="remind" id="remind" name="remind" type="checkbox" class="h-4 w-4 rounded border-gray-300
+                                           text-indigo-600 focus:ring-indigo-600" />
+                                    </div>
+                                    <div class="text-sm leading-6">
+                                        <label for="remind" class="font-medium
+                                       text-gray-900">Remind Me</label>
+                                        <p class="text-gray-500">
+                                            Get notified about this event an hour before.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 flex items-center justify-end gap-x-6">
+                    <button type="button" class="text-sm font-semibold
+                   leading-6 text-gray-900" (click)="clear()">
+                        Clear
+                    </button>
+                    <button *ngIf="isEditing" type="submit" class="rounded-md bg-indigo-600 px-3 py-2 
+                      text-sm font-semibold text-white shadow-sm
+                       hover:bg-indigo-500 focus-visible:outline 
+                       focus-visible:outline-2 focus-visible:outline-offset-2
+                        focus-visible:outline-indigo-600" (click)="onUpdateClick()">
+                        Update
+                    </button>
+                    <button *ngIf="!isEditing" type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm
+                       font-semibold text-white shadow-sm 
+                       hover:bg-indigo-500 focus-visible:outline
+                        focus-visible:outline-2 
+                        focus-visible:outline-offset-2
+                         focus-visible:outline-indigo-600" (click)="onAddClick()">
+                        Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="m-5">
+    <h2 class="text-center text-3xl font-semibold leading-7
+   text-green-600 mt-2 mb-5">
+        List Of Upcoming Events
+    </h2>
+    <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-4">
+        <div *ngFor="let event of eventsArray">
+            <div class="max-w-xs rounded overflow-hidden 
+          shadow-lg bg-gray-100">
+                <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">{{ event.title }}</div>
+                    <div class="flex items-start justify-between">
+                        <div class="text-gray-700 text-sm">
+                            {{ event.date | date : "fullDate" }}
+                            <p></p>
+                        </div>
+                        <div *ngIf="event.remind">
+                            <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="m5.705 3.71-1.41-1.42C1 
+                                  5.563 1 7.935 1 11h1l1-.063C3 8.009 3
+                                   6.396 5.705 3.71zm13.999-1.42-1.408 1.42C21
+                                    6.396 21 8.009 21 11l2-.063c0-3.002 
+                                    0-5.374-3.296-8.647zM12 22a2.98 2.98 0 0 0 
+                                    2.818-2H9.182A2.98 2.98 0 0 0 12 
+                                    22zm7-7.414V10c0-3.217-2.185-5.927-5.145-6.742C13.562
+                                     2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.184
+                                      4.073 5 6.783 5 10v4.586l-1.707 1.707A.996.996
+                                       0 0 0 3 17v1a1 1 0 0 0 1 1h16a1 
+                                       1 0 0 0 1-1v-1a.996.996 0 0 0-.293-.707L19 14.586z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 mb-2">
+                    <span class="inline-block bg-gray-200 rounded-full
+                       px-3 py-1 text-xs font-semibold
+                        text-gray-700 mr-2 mb-2">{{
+                        event.location }}</span>
+                </div>
+                <div class="flex items-center 
+              justify-center gap-x-3 my-2">
+                    <button type="button" class="rounded-md bg-yellow-500
+                       px-5 py-2 text-sm font-semibold 
+                       text-white shadow-sm hover:bg-yellow-400 
+                       focus-visible:outline focus-visible:outline-2 
+                       focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+                        (click)="onEditEvent(event._id)">
+                        Edit
+                    </button>
+                    <button type="button" class="rounded-md bg-red-600 px-3 py-2 text-sm
+                       font-semibold text-white shadow-sm hover:bg-red-500
+                        focus-visible:outline focus-visible:outline-2 
+                        focus-visible:outline-offset-2 
+                        focus-visible:outline-red-600" (click)="onDeleteEvent(event._id)">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
